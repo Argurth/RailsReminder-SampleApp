@@ -4,6 +4,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:michael)
     @other_user = users(:archer)
+    @non_activated = users(:lana)
   end
 
   test "should redirect index when not logged in" do
@@ -14,6 +15,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
     get signup_path
     assert_response :success
+  end
+
+  test "should redirect show when not user not activated in" do
+    get user_path(@non_activated)
+    assert flash.empty?
+    assert_redirected_to root_url
   end
 
   test "should redirect edit when not logged in" do
