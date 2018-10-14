@@ -34,6 +34,7 @@ guard :minitest, spring: "bin/rails test", all_on_start: false do
     resource_tests('users') +
         ['test/integration/microposts_interface_test.rb']
   end
+  notification :off
 end
 
 # Returns the integration tests corresponding to the given resource.
