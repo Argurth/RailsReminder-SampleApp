@@ -124,4 +124,33 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert flash.empty?
     assert_redirected_to root_url
   end
+
+  test "successful edit with friendly forwarding" do
+    get edit_user_path(@user)
+    assert_equal session[:forwarding_url], edit_user_url(@user)
+    log_in_as(@user)
+    assert_redirected_to edit_user_url(@user)
+    assert_not session[:forwarding_url]
+    user_params = {
+        name: "Foo Bar",
+        email: "foo@bar.com",
+        password: "",
+        password_confirmation: ""
+    }
+    patch user_path(@user), params: { user: user_params }
+
+    assert_redirected_to @user
+    follow_redirect!
+    assert_template 'users/show'
+    assert_not flash.empty?
+    assert flash["success"]
+    assert_not flash["danger"]
+    assert_not flash["warning"]
+    assert_select 'div.alert.alert-success', flash["success"]
+
+    @user.reload
+    assert_equal user_params[:name], @user.name
+    assert_equal user_params[:email], @user.email
+    assert @user.authenticate("password")
+  end
 end
