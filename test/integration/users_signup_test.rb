@@ -19,6 +19,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/new'
     assert_select 'div#error_explanation'
     assert_select 'div.field_with_errors'
+    assert_select 'div.alert.alert-danger', "The form contains 4 errors."
     user.errors.full_messages.each do |e|
       assert_select "div#error_explanation ul li", e
     end
