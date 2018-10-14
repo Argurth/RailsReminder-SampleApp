@@ -41,7 +41,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert is_logged_in?
     assert_not flash.empty?
     assert flash["success"]
-    assert_not flash["error"]
+    assert_not flash["danger"]
     assert_not flash["warning"]
     assert_select 'div.alert.alert-success', flash["success"]
   end
